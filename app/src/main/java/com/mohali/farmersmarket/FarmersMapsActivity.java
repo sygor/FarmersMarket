@@ -85,7 +85,7 @@ private void getMarketData(){
     Gson gson = new Gson();
     Market[]marketList = gson.fromJson(marketJson, Market[].class);
     for (Market market: marketList) {
-        mMap.addMarker(new MarkerOptions().position(market.getLatLng()).title(market.getFacility_name()));
+        mMap.addMarker(new MarkerOptions().position(market.getLatLng()).title(market.getFacility_name()).snippet(market.getStreet_name()));
     }
 
 
