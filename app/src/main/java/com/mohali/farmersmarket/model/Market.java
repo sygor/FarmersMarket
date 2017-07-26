@@ -1,65 +1,50 @@
 package com.mohali.farmersmarket.model;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by boss on 7/18/2017.
  */
 
 public class Market {
-    String facilityaddinfo;
-    String facilitycity;
-    String facilityname;
-    String gfacilitystate;
-    String facilitystreetname;
-    String facilityzipcode;
-    double latitude;
-    double longitude;
 
-    public String getFacilityaddinfo() {
-        return facilityaddinfo;
+
+    String facility_name;
+    String street_name ;
+    String borough;
+    public LatLng getLatLng(){
+       return new LatLng(latitude,longitude);
+    }
+    public String getFacility_name() {
+        return facility_name;
     }
 
-    public void setFacilityaddinfo(String facilityaddinfo) {
-        this.facilityaddinfo = facilityaddinfo;
+    public void setFacility_name(String facility_name) {
+        this.facility_name = facility_name;
     }
 
-    public String getFacilitycity() {
-        return facilitycity;
+    public String getStreet_name() {
+        return street_name;
     }
 
-    public void setFacilitycity(String facilitycity) {
-        this.facilitycity = facilitycity;
+    public void setStreet_name(String street_name) {
+        this.street_name = street_name;
     }
 
-    public String getFacilityname() {
-        return facilityname;
+    public String getBorough() {
+        return borough;
     }
 
-    public void setFacilityname(String facilityname) {
-        this.facilityname = facilityname;
+    public void setBorough(String borough) {
+        this.borough = borough;
     }
 
-    public String getGfacilitystate() {
-        return gfacilitystate;
+    public double getZip() {
+        return zip;
     }
 
-    public void setGfacilitystate(String gfacilitystate) {
-        this.gfacilitystate = gfacilitystate;
-    }
-
-    public String getFacilitystreetname() {
-        return facilitystreetname;
-    }
-
-    public void setFacilitystreetname(String facilitystreetname) {
-        this.facilitystreetname = facilitystreetname;
-    }
-
-    public String getFacilityzipcode() {
-        return facilityzipcode;
-    }
-
-    public void setFacilityzipcode(String facilityzipcode) {
-        this.facilityzipcode = facilityzipcode;
+    public void setZip(double zip) {
+        this.zip = zip;
     }
 
     public double getLatitude() {
@@ -77,4 +62,8 @@ public class Market {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
+    double zip ;
+    double latitude;
+    double longitude;
 }

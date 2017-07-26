@@ -5,22 +5,17 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,11 +26,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.mohali.farmersmarket.model.GsonRequest;
+import com.google.gson.Gson;
 import com.mohali.farmersmarket.model.Market;
 
-import java.util.List;
-import java.util.Locale;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class FarmersMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG  = FarmersMapsActivity.class.getSimpleName();
@@ -84,26 +79,35 @@ public class FarmersMapsActivity extends AppCompatActivity implements OnMapReady
 
     }
 ///getMarket Data
-public void getMarketData(){
-    RequestQueue queue = Volley.newRequestQueue(this);
-    String url = "https://data.cityofnewyork.us/resource/cw3p-q2v6.json";
-    GsonRequest gsonRequest = new GsonRequest(url, Market[].class, null, new Response.Listener() {
-        @Override
-        public void onResponse(Object response) {
-            showSnackbar("volley success");
+private void getMarketData(){
+    String marketJson = loadJSONFromAsset();
+    Gson gson = new Gson();
+    Market[]marketList = gson.fromJson(marketJson, Market[].class);
+    for (Market market: marketList) {
+        mMap.addMarker(new MarkerOptions().position(market.getLatLng()).title(market.getFacility_name()));
+    }
 
-            // Call Google Place API for address conversion
-        }
-    }, new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            showSnackbar("volley error");
-        }
-    });
 
-    queue.add(gsonRequest);
+    
+
 }
+// read jason file
 
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getResources().openRawResource(R.raw.farmarsmarket);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            Log.e(TAG,"Error reading string file",ex);
+            return null;
+        }
+        return json;
+    }
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
         Snackbar.make(findViewById(android.R.id.content),
