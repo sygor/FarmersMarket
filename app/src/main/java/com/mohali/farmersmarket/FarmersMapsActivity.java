@@ -56,9 +56,10 @@ public class FarmersMapsActivity extends AppCompatActivity implements OnMapReady
         locatorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(FarmersMapsActivity.this, "locatorClicked", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(FarmersMapsActivity.this, "locatorClicked", Toast.LENGTH_SHORT).show();
 
                 // Kick off location process
+                getLastLocation();
             }
         });
 
@@ -88,7 +89,7 @@ private void getMarketData(){
     }
 
 
-    
+
 
 }
 // read jason file
@@ -216,7 +217,7 @@ private void getMarketData(){
                            //showSnackbar("last location" + lastLocation.getLatitude() + "," +lastLocation.getLongitude() );
                             LatLng user = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
                             //mMap.addMarker(new MarkerOptions().position(user).title("currentLocation"));
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(user,12));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(user,14));
 
                         } else {
                             Log.w(TAG, "getLastLocation:exception", task.getException());
