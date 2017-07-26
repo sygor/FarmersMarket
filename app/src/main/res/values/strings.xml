@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">FarmersMarket</string>
+    <string name="title_activity_farmers_maps">Farmers Market</string>
+    <string name="permission_rationale">we need location</string>
+    <string name="permission_denied_explanation">permission denied</string>
+    <string name="settings">please go to setting</string>
+    <string name="no_location_detected">no location</string>
+</resources>
