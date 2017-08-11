@@ -23,6 +23,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -70,6 +71,21 @@ public class FarmersMapsActivity extends AppCompatActivity implements OnMapReady
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                //showSnackbar("clicked annotation " + ((Market) marker.getTag()).getFacility_name());
+
+                //navigation
+                Market market = (Market) marker.getTag();
+                Uri gmmIntentUri = Uri.parse("google.navigation:q="+market.getLatitude()+","+market.getLongitude());
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
         getMarketData();
         if (!checkPermissions()) {
             requestPermissions();
@@ -85,7 +101,13 @@ private void getMarketData(){
     Gson gson = new Gson();
     Market[]marketList = gson.fromJson(marketJson, Market[].class);
     for (Market market: marketList) {
-        mMap.addMarker(new MarkerOptions().position(market.getLatLng()).title(market.getFacility_name()).snippet(market.getStreet_name()));
+        mMap.addMarker(
+                new MarkerOptions()
+                        .position(market.getLatLng())
+                        .title(market.getFacility_name())
+                        .snippet(market.getStreet_name())
+
+        ).setTag(market);
     }
 
 
