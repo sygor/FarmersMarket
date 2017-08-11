@@ -76,11 +76,10 @@ public class FarmersMapsActivity extends AppCompatActivity implements OnMapReady
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                //showSnackbar("clicked annotation " + ((Market) marker.getTag()).getFacility_name());
-
-                //navigation
+                //Create Google Map Navigation Intent
                 Market market = (Market) marker.getTag();
-                Uri gmmIntentUri = Uri.parse("google.navigation:q="+market.getLatitude()+","+market.getLongitude());
+                //Uri gmmIntentUri = Uri.parse("google.navigation:q="+market.getLatitude()+","+market.getLongitude());
+                Uri gmmIntentUri = Uri.parse("https://www.google.com/maps/dir/?api=1&destination="+market.getLatitude()+","+market.getLongitude());
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 startActivity(mapIntent);
@@ -95,29 +94,30 @@ public class FarmersMapsActivity extends AppCompatActivity implements OnMapReady
         }
 
     }
-///getMarket Data
-private void getMarketData(){
-    String marketJson = loadJSONFromAsset();
-    Gson gson = new Gson();
-    Market[]marketList = gson.fromJson(marketJson, Market[].class);
-    for (Market market: marketList) {
-        mMap.addMarker(
-                new MarkerOptions()
-                        .position(market.getLatLng())
-                        .title(market.getFacility_name())
-                        .snippet(market.getStreet_name())
+    //getMarket Data
+    private void getMarketData(){
+        String marketJson = loadJSONFromAsset();
+        Gson gson = new Gson();
+        Market[]marketList = gson.fromJson(marketJson, Market[].class);
 
-        ).setTag(market);
-    }
+        // Plot on map
+        for (Market market: marketList) {
+            mMap.addMarker(
+                    new MarkerOptions()
+                            .position(market.getLatLng())
+                            .title(market.getFacility_name())
+                            .snippet(market.getStreet_name())
+
+            ).setTag(market);
+        }
 
 
 
 
 }
-// read jason file
-
+    // read JSON file
     public String loadJSONFromAsset() {
-        String json = null;
+        String json;
         try {
             InputStream is = getResources().openRawResource(R.raw.farmarsmarket);
             int size = is.available();
@@ -248,15 +248,4 @@ private void getMarketData(){
                     }
                 });
     }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-
 }
